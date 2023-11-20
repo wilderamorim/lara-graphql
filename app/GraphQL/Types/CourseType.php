@@ -3,17 +3,16 @@
 namespace App\GraphQL\Types;
 
 use App\GraphQL\Fields\FormattableDate;
-use App\Models\Category;
+use App\Models\Course;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class CategoryType extends GraphQLType
+class CourseType extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'Category',
-        'description' => 'A category',
-        'model' => Category::class,
+        'name' => 'Course',
+        'description' => 'A course',
+        'model' => Course::class,
     ];
 
     public function fields(): array
@@ -21,15 +20,19 @@ class CategoryType extends GraphQLType
         return [
             'id' => [
                 'type' => Type::nonNull(Type::id()),
+                'description' => 'The id of the course',
+            ],
+            'category_id' => [
+                'type' => Type::nonNull(Type::id()),
                 'description' => 'The id of the category',
             ],
             'name' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'The name of category',
+                'description' => 'The name of course',
             ],
             'description' => [
                 'type' => Type::string(),
-                'description' => 'The description of category',
+                'description' => 'The description of course',
             ],
             'createdAt' => new FormattableDate([
                 'alias' => 'created_at',
@@ -37,10 +40,6 @@ class CategoryType extends GraphQLType
             'updatedAt' => new FormattableDate([
                 'alias' => 'updated_at',
             ]),
-            'courses' => [
-                'type' => Type::listOf(GraphQL::type('Course')),
-                'description' => 'The courses of category',
-            ],
         ];
     }
 }

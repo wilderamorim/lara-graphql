@@ -76,11 +76,9 @@ return [
         'default' => [
             'query' => [
                 // ExampleQuery::class,
-                'categories' => \App\GraphQL\Queries\CategoriesQuery::class,
             ],
             'mutation' => [
                 // ExampleMutation::class,
-                'createCategory' => \App\GraphQL\Mutations\CreateCategoryMutation::class,
             ],
             // The types only available in this schema
             'types' => [
@@ -96,6 +94,7 @@ return [
             // An array of middlewares, overrides the global ones
             'execution_middleware' => null,
         ],
+        'category' => \App\GraphQL\Schemas\CategorySchema::class,
     ],
 
     // The global types available to all schemas.
@@ -111,7 +110,6 @@ return [
         // ExampleType::class,
         // ExampleRelationType::class,
         // \Rebing\GraphQL\Support\UploadType::class,
-        'Category' => \App\GraphQL\Types\CategoryType::class,
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.

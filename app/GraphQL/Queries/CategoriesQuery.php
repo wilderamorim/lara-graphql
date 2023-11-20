@@ -2,12 +2,12 @@
 
 namespace App\GraphQL\Queries;
 
-use Closure;
 use App\Models\Category;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Query;
+use Rebing\GraphQL\Support\SelectFields;
 
 class CategoriesQuery extends Query
 {
@@ -38,20 +38,25 @@ class CategoriesQuery extends Query
         ];
     }
 
-    public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, SelectFields $fields)
     {
+        $select = $fields->getSelect();
+        $with = $fields->getRelations();
+
+        $model = Category::select($select)->with($with);
+
         if (isset($args['id'])) {
-            return Category::where('id', $args['id'])->get();
+            $model->where('id', $args['id']);
         }
 
         if (isset($args['name'])) {
-            return Category::where('name', $args['name'])->get();
+            $model->where('name', 'like', '%' . $args['name'] . '%');
         }
 
         if (isset($args['description'])) {
-            return Category::where('description', $args['description'])->get();
+            $model->where('description', 'like', '%' . $args['description'] . '%');
         }
 
-        return Category::all();
+        return $model->get();
     }
 }

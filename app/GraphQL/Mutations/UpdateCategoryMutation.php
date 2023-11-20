@@ -9,10 +9,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
 
-class CreateCategoryMutation extends Mutation
+class UpdateCategoryMutation extends Mutation
 {
     protected $attributes = [
-        'name' => 'createCategory',
+        'name' => 'updateCategory',
     ];
 
     public function type(): Type
@@ -23,6 +23,10 @@ class CreateCategoryMutation extends Mutation
     public function args(): array
     {
         return [
+            'id' => [
+                'name' => 'id',
+                'type' => Type::nonNull(Type::int()),
+            ],
             'name' => [
                 'name' => 'name',
                 'type' => Type::nonNull(Type::string()),
@@ -44,6 +48,9 @@ class CreateCategoryMutation extends Mutation
 
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return Category::create($args);
+        $model = Category::findOrFail($args['id']);
+        $model->fill($args);
+        $model->save();
+        return $model;
     }
 }
