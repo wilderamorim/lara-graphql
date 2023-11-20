@@ -2,28 +2,32 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Category;
+use App\Models\Course;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Query;
 use Rebing\GraphQL\Support\SelectFields;
 
-class CategoriesQuery extends Query
+class CoursesQuery extends Query
 {
     protected $attributes = [
-        'name' => 'categories',
+        'name' => 'courses',
     ];
 
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('Category'));
+        return Type::listOf(GraphQL::type('Course'));
     }
 
     public function args(): array
     {
         return [
             'id' => [
+                'name' => 'id',
+                'type' => Type::int(),
+            ],
+            'category_id' => [
                 'name' => 'id',
                 'type' => Type::int(),
             ],
@@ -35,10 +39,6 @@ class CategoriesQuery extends Query
                 'name' => 'description',
                 'type' => Type::string(),
             ],
-            'hasCourses' => [
-                'name' => 'hasCourses',
-                'type' => Type::boolean(),
-            ],
         ];
     }
 
@@ -47,10 +47,14 @@ class CategoriesQuery extends Query
         $select = $fields->getSelect();
         $with = $fields->getRelations();
 
-        $model = Category::select($select)->with($with);
+        $model = Course::select($select)->with($with);
 
         if (isset($args['id'])) {
             $model->where('id', $args['id']);
+        }
+
+        if (isset($args['category_id'])) {
+            $model->where('category_id', $args['category_id']);
         }
 
         if (isset($args['name'])) {
@@ -59,10 +63,6 @@ class CategoriesQuery extends Query
 
         if (isset($args['description'])) {
             $model->where('description', 'like', '%' . $args['description'] . '%');
-        }
-
-        if (isset($args['hasCourses'])) {
-            $model->whereHas('courses');
         }
 
         return $model->get();

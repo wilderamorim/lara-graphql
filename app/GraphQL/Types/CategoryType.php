@@ -41,6 +41,22 @@ class CategoryType extends GraphQLType
                 'type' => Type::listOf(GraphQL::type('Course')),
                 'description' => 'The courses of category',
             ],
+            'coursesCount' => [
+                'type' => Type::int(),
+                'description' => 'The courses count of category',
+                'selectable' => false,
+                'resolve' => function ($root, $args) {
+                    return $root->courses()->count();
+                },
+            ],
+            'hasCourses' => [
+                'type' => Type::boolean(),
+                'description' => 'The courses count of category',
+                'selectable' => false,
+                'resolve' => function ($root, $args) {
+                    return $root->courses()->exists();
+                },
+            ],
         ];
     }
 }

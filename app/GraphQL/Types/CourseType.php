@@ -5,6 +5,7 @@ namespace App\GraphQL\Types;
 use App\GraphQL\Fields\FormattableDate;
 use App\Models\Course;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class CourseType extends GraphQLType
@@ -40,6 +41,10 @@ class CourseType extends GraphQLType
             'updatedAt' => new FormattableDate([
                 'alias' => 'updated_at',
             ]),
+            'category' => [
+                'type' => GraphQL::type('Category'),
+                'description' => 'The category of course',
+            ],
         ];
     }
 }

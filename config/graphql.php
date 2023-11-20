@@ -95,6 +95,7 @@ return [
             'execution_middleware' => null,
         ],
         'category' => \App\GraphQL\Schemas\CategorySchema::class,
+        'course' => \App\GraphQL\Schemas\CourseSchema::class,
     ],
 
     // The global types available to all schemas.

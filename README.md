@@ -92,6 +92,21 @@ Or alternatively:
 
 http://localhost:8989/graphql/category?query=query+FetchCategoryByID($id:Int){categories(id:$id){id,name}}&variables={"id":1}
 
+### Fetch categories that have courses
+
+```graphql
+query FetchCategoriesHasCourses {
+  categories(hasCourses: true) {
+    id
+    name
+  }
+}
+```
+
+Or alternatively:
+
+http://localhost:8989/graphql/category?query=query+FetchCategoriesHasCourses{categories(hasCourses:true){id,name}}
+
 ### Create a category
 
 ```graphql
